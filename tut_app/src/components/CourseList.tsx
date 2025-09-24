@@ -1,6 +1,15 @@
 
+
+interface Course {
+  term: string;
+  number: string;
+  meets: string;
+  title: string;
+
+}
+
 interface CourseListProps {
-  list: Record<string, Object>;
+  courses: Record<string, Course>;
 }
 
 const CourseList = ({courses}: CourseListProps) => (
