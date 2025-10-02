@@ -3,8 +3,10 @@
 //import viteLogo from '/vite.svg'
 import Banner from './components/Banner'
 import CourseList from './components/CourseList'
+//import Course from './components/CourseList'
+import { useJsonQuery } from './utilities/fetch';
 
-const schedule = {
+/*const schedule = {
   "title": "CS Courses for 2018-2019",
   "courses": {
     "F101" : {
@@ -33,9 +35,27 @@ const schedule = {
     }
   }
 };
+*/
+interface schedule {
+  title: string,
+  courses: Record<string, Course>
+}
+
+interface Course {
+  term: string;
+  number: string;
+  meets: string;
+  title: string;
+
+}
 
 
 const App = () => {
+  const [json, isLoading, error] = useJsonQuery("https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php")
+  if (error) return <h1>Error loading user data: {`${error}`}</h1>;
+  if (isLoading) return <h1>Loading user data...</h1>;
+  if (!json) return <h1>No user data found</h1>;
+  const schedule = json as schedule; 
   return ( 
     <>
         <Banner title={schedule.title}/>
