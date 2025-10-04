@@ -2,9 +2,12 @@
 //import reactLogo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
 import Banner from './components/Banner'
-import CourseList from './components/CourseList'
+//import Menu from './components/TermFilter';
+//import MenuSelector from './components/TermFilter';
+import MenuPage from './components/TermFilter';
 //import Course from './components/CourseList'
 import { useJsonQuery } from './utilities/fetch';
+
 
 /*const schedule = {
   "title": "CS Courses for 2018-2019",
@@ -56,10 +59,13 @@ const App = () => {
   if (isLoading) return <h1>Loading user data...</h1>;
   if (!json) return <h1>No user data found</h1>;
   const schedule = json as schedule; 
+  //const [selection, setSelection] = useState(Object.keys(terms)[0]);
   return ( 
     <>
         <Banner title={schedule.title}/>
-        <CourseList courses= {schedule.courses}/>
+        <MenuPage courses= {schedule.courses}/>
+        
+        
     </>
   )
 }

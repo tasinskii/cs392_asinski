@@ -10,6 +10,7 @@ interface Course {
 
 interface CourseListProps {
   courses: Record<string, Course>;
+  term: string;
 }
 
 interface CourseCardProps {
@@ -24,26 +25,22 @@ const CourseCard = ({name, course}: CourseCardProps) => (
     <div className="row-start-6 text-gray-500">{course.meets}</div>
   </div>
 ) 
-const CourseList = ({courses}: CourseListProps) => (
-
-  <div className = "grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-4 px-3">
-    {
-      Object.entries(courses).map(
-        ([name, content]) => (
-          CourseCard({name: name, course: content})
+const CourseList = ({courses, term}: CourseListProps) => {
+  return (
+    <div className = "grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-4 px-3">
+      {
+        Object.entries(courses).map(
+          ([name, content]) => (
+            content.term === term ? CourseCard({name: name, course: content}) : null
+          )
         )
-      )
-    }
+      }
+    </div>
+  );
 
-  </div>
+  
+  
 
-  //<ul>
-  //{
-  //  Object.entries(courses).map(([name, content]) => (
-  //    <li> {name} : {content.title}  </li>
-  //  ))
-  //}
-  //</ul>
-)
+}
 
 export default CourseList
