@@ -1,4 +1,4 @@
-//import { useState } from 'react'
+
 //import reactLogo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
 import Banner from './components/Banner'
@@ -55,10 +55,12 @@ interface Course {
 
 const App = () => {
   const [json, isLoading, error] = useJsonQuery("https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php")
+  
   if (error) return <h1>Error loading user data: {`${error}`}</h1>;
   if (isLoading) return <h1>Loading user data...</h1>;
   if (!json) return <h1>No user data found</h1>;
-  const schedule = json as schedule; 
+  const schedule = json as schedule;
+  
   //const [selection, setSelection] = useState(Object.keys(terms)[0]);
   return ( 
     <>
