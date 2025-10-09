@@ -14,7 +14,7 @@ interface MenuButtonProps {
 }
 
 const MenuButton = ({term, selection, setSelection} : MenuButtonProps) => (
-  <div>
+  <div className = "p-2">
     <input type="radio" id={term} className="btn-check" checked={term === selection} autoComplete="off"
       onChange={() => setSelection(term)} />
     <label className="btn btn-success mb-1 p-2" htmlFor={term}>
@@ -36,15 +36,6 @@ const MenuSelector = ({selection, setSelection} : MenuSelectorProps) => (
   </div>
 );
 
-interface MenuProps {
-  selection: string;
-}   
-const Menu = ({selection} : MenuProps) => (
-  <div className="card" >
-    {selection}
-  </div>
-);
-
 interface MenuPageProps {
   courses: Record<string, Course>;
 }
@@ -61,7 +52,6 @@ const MenuPage = ({courses}: MenuPageProps) => {
   return (
     <div>
       <MenuSelector selection={selection} setSelection={setSelection} />
-      <Menu selection={selection} />
       <CourseList courses={courses} term={selection}/>
     </div>
 

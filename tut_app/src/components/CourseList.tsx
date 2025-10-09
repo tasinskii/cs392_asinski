@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Modal from './Modal'
 interface Course {
   term: string;
   number: string;
@@ -11,8 +12,6 @@ interface CourseListProps {
   courses: Record<string, Course>;
   term: string;
 }
-
-
 
 interface CourseCardProps {
   key: number;
@@ -34,8 +33,10 @@ const CourseCard = ({key, name, course, isSelected, click}: CourseCardProps) => 
   </div>
   )  
 }
+
 const CourseList = ({courses, term}: CourseListProps) => {
   const [selected, setSelected] = useState(Array(Object.entries(courses).length).fill(0));
+  const [popUp, setPopUp] = useState(false);
   const click = (i:number) => {
     setSelected(selected => {
       const cp = [...selected];
@@ -44,11 +45,25 @@ const CourseList = ({courses, term}: CourseListProps) => {
     });
     
   };
-  const courseNames = Object.entries(courses).map((name, _) => name[0]);
-  console.log(courseNames);
+  const courseNames = Object.entries(courses).map(([name, _]) => name);
+  const courseTitles = Object.entries(courses).map(([_, content]) => content.title);
+  const courseMeeting = Object.entries(courses).map(([_, content]) => content.meets);
+  const courseInfo = courseNames.map((_, i) => [courseNames[i], courseTitles[i], courseMeeting[i]])
+  console.log(Object.entries(courses)); 
   return (
     <div> 
-      {`Selected Courses: ${selected.filter(x => x == 1).map((_, i) => courseNames[i])}`}
+      <button className="absolute top-2 right-2 text-gray-500 hover:text-gray-700" onClick={() => setPopUp(true)}>See selected courses</button> 
+
+      <Modal isOpen={popUp} onClose={ () => setPopUp(!popUp)}>
+        <div className = "p-2 grid grid-cols-1">
+          {
+            selected.filter(x => x == 1).length == 0 ? 
+              `Click on courses to add them to your schedule!` : 
+              `Selected Courses: ${selected.filter(x => x == 1).map((_, i) => courseInfo[i])}`
+          }
+        </div>
+      </Modal>
+      
       <div className = "grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-4 px-3">
         
         {Object.entries(courses).map(([name, content], i) =>
