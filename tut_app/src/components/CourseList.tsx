@@ -44,7 +44,9 @@ const CourseList = ({courses, term}: CourseListProps) => {
   let init_week = Array.from({ length: 5 }, () => ({
   times: Array<boolean>(144).fill(true)
   }))
-  const [week, setWeek] = useState(init_week);
+  const [weekFall, setWeekFall] = useState(init_week);
+  const [weekWinter, setWeekWinter] = useState(init_week);
+  const [weekSpring, setWeekSpring] = useState(init_week);
   const [invalidCourses, setInvalidCourses] = useState(Array<boolean>(Object.entries(courses).length).fill(false)); 
   const courseNames = Object.entries(courses).map(([name, _]) => name);
   const courseTitles = Object.entries(courses).map(([_, content]) => content.title);
@@ -57,6 +59,24 @@ const CourseList = ({courses, term}: CourseListProps) => {
   const click = (i:number) => {
     //check if overlap
     //console.log(week)
+    const term = courseNames[i][0];
+    let week;
+    let setWeek;
+    console.log(term)
+    switch (term) {
+      case 'F':
+        week = weekFall;
+        setWeek = setWeekFall;
+        break;
+      case 'W': 
+        week = weekWinter;
+        setWeek = setWeekWinter;
+        break;
+      case 'S':
+        week = weekSpring;
+        setWeek = setWeekSpring;
+        break;
+    } 
     const meets_data = courseMeeting[i].split(" ");
     const days = meets_data[0];
     const time = meets_data[1].split("-")
@@ -73,13 +93,26 @@ const CourseList = ({courses, term}: CourseListProps) => {
         setWeek(prevWeek => {
           const newWeek = updateTimes(days, time, prevWeek, false);
           
-          setInvalidCourses(courseMeeting.map(meeting =>
-            detectOverlap(
-              meeting.split(" ")[0],
-              meeting.split(" ")[1].split("-"),
-              newWeek
-            )
+          setInvalidCourses(courseMeeting.map((meeting, j) => {
+            if (courseNames[j][0] === term) {
+              console.log(meeting)
+              console.log(detectOverlap(
+                meeting.split(" ")[0],
+                meeting.split(" ")[1].split("-"),
+                newWeek
+              ))
+              return detectOverlap(
+                meeting.split(" ")[0],
+                meeting.split(" ")[1].split("-"),
+                newWeek
+              )
+            }else{
+              return false;
+            }
+          }
+
           ));
+          console.log(invalidCourses);
           return newWeek;
         });
 
@@ -93,13 +126,19 @@ const CourseList = ({courses, term}: CourseListProps) => {
 
       setWeek(prevWeek => {
         const newWeek = updateTimes(days, time, prevWeek, true);
-        
-        setInvalidCourses(courseMeeting.map(meeting =>
-          detectOverlap(
-            meeting.split(" ")[0],
-            meeting.split(" ")[1].split("-"),
-            newWeek
-          )
+        setInvalidCourses(courseMeeting.map((meeting,j) => {
+          if (courseNames[j][0] === term) {
+            //console.log("check")
+            return detectOverlap(
+              meeting.split(" ")[0],
+              meeting.split(" ")[1].split("-"),
+              newWeek
+            )
+          }else{
+            return false;
+          }
+        }
+
         ));
         return newWeek;
       });

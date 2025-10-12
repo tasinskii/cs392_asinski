@@ -42,13 +42,13 @@ function newday(time: Array<string>, times: Array<boolean>, set_or_clear: boolea
 
 
 export function updateTimes(days: string, time: Array<string>, week: Array<day>, set_or_clear: boolean) {
-  console.log("update_times")
+  //console.log("update_times")
   let week_cp = week.map(day => ({
   ...day,
   times: [...day.times],
   }));
   if (days.includes("M")){
-    console.log("M")
+    //console.log("M")
     const monday = newday(time, week_cp[0].times, set_or_clear);
     //console.log(week[0].times)
     week_cp[0].times = monday;
@@ -59,7 +59,7 @@ export function updateTimes(days: string, time: Array<string>, week: Array<day>,
     const fri = newday(time, week_cp[2].times, set_or_clear);
     week_cp[2].times = fri;
   } if (days.includes("Tu")){
-    console.log("Tu")
+    //console.log("Tu")
     const tues = newday(time, week_cp[3].times, set_or_clear);
     week_cp[3].times = tues;
   } if (days.includes("Th")){
