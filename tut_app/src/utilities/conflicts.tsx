@@ -1,28 +1,11 @@
-
-interface Course {
-  term: string;
-  number: string;
-  meets: string;
-  title: string;
-}
-
-interface CourseCardProps {
-  key: number;
-  name: string;
-  course: Course;
-  isSelected: boolean; 
-  click: () => void;
-  noConflict: boolean;
-}
-
 export interface day {
   times: Array<boolean>; //ten minute increments, false is occupied, available is true
 }
 
 
 function calctime_in10mins(time: Array<string>) { 
-  let start_time = (time[0].split(":")[0] * 6) + (time[0].split(":")[1] / 10); //mins
-  let end_time = (time[1].split(":")[0] * 6) + (time[1].split(":")[1] / 10); //mins ,
+  let start_time = (parseInt(time[0].split(":")[0]) * 6) + (parseInt(time[0].split(":")[1]) / 10); //mins
+  let end_time = (parseInt(time[1].split(":")[0]) * 6) + (parseInt(time[1].split(":")[1]) / 10); //mins ,
   return [start_time, end_time];
 }
 

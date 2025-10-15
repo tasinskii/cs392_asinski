@@ -2,12 +2,13 @@ import { useState } from 'react'
 import Modal from './Modal'
 import type {day} from '../utilities/conflicts'
 import {updateTimes, detectOverlap} from '../utilities/conflicts'
+import CourseEditor from '../components/Form'
+
 interface Course {
   term: string;
   number: string;
   meets: string;
   title: string;
-
 }
 
 interface CourseListProps {
@@ -22,28 +23,37 @@ interface CourseCardProps {
   isSelected: boolean; 
   click: () => void;
   isConflict: boolean;
+  editClick: () => void;
 }
-const CourseCard = ({key, name, course, isSelected, click, isConflict}: CourseCardProps) => {
-  //console.log(key)
+const CourseCard = ({key, name, course, isSelected, click, isConflict, editClick}: CourseCardProps) => {
+  console.log(key)
+  //<CourseEditor arr={[course.title, course.meets]}/> 
   return (
-    <div onClick={click}>
-      <div className = {`grid grid-rows-6 grid-cols-1 h-50 w-auto-fit p-2 border-2 border-gray-200 rounded-lg ${
-          isSelected ? "bg-blue-100" : isConflict ? "bg-red-100" : ""}`}>   
-        <div className = "font-bold text-2xl text-black ">{name}</div>
-        <div className="row-start-2">{course.title}</div>
-        <div className="row-start-6 text-gray-500">{course.meets}</div>
-    </div> 
-  </div>
+    <div>    
+      <div onClick={click}>
+        <div className = {`grid grid-rows-6 grid-cols-1 h-50 w-auto-fit p-2 border-2 border-gray-200 rounded-lg ${
+            isSelected ? "bg-blue-100" : isConflict ? "bg-red-100" : ""}`}>   
+          <div className = "font-bold text-2xl text-black ">{name}</div>
+          <div className="row-start-2">{course.title}</div>
+          <div className="row-start-6 text-gray-500">{course.meets}</div>
+        </div>
+      </div>
+      <button className = "bg-blue-50 rounded-lg p-2" onClick={editClick} >Edit</button> 
+
+    </div>
+
   )  
 }
 
 const CourseList = ({courses, term}: CourseListProps) => {
   const [selected, setSelected] = useState(Array(Object.entries(courses).length).fill(0));
   const [popUp, setPopUp] = useState(false);
-  let init_day: day = {times: Array<boolean>(144).fill(true)}; //initially, everything is available 
-  let init_week = Array.from({ length: 5 }, () => ({
-  times: Array<boolean>(144).fill(true)
+  const [editPopUp, setEditPopUp] = useState(false);
+  
+  let init_week = Array.from({ length: 5 }, (): day => ({ 
+    times: Array<boolean>(144).fill(true)
   }))
+  const [currentEdit, setCurrentEdit] = useState(-1);
   const [weekFall, setWeekFall] = useState(init_week);
   const [weekWinter, setWeekWinter] = useState(init_week);
   const [weekSpring, setWeekSpring] = useState(init_week);
@@ -53,8 +63,10 @@ const CourseList = ({courses, term}: CourseListProps) => {
   const courseMeeting = Object.entries(courses).map(([_, content]) => content.meets);
   const courseInfo = courseNames.map((_, i) => [courseNames[i], courseTitles[i], courseMeeting[i]])
 
-
-
+  const editClick = (i :number) => {
+    setEditPopUp(true);
+    setCurrentEdit(i); 
+  }
 
   const click = (i:number) => {
     //check if overlap
@@ -76,7 +88,10 @@ const CourseList = ({courses, term}: CourseListProps) => {
         week = weekSpring;
         setWeek = setWeekSpring;
         break;
-    } 
+      default: 
+        return;
+    }
+    
     const meets_data = courseMeeting[i].split(" ");
     const days = meets_data[0];
     const time = meets_data[1].split("-")
@@ -167,12 +182,16 @@ const CourseList = ({courses, term}: CourseListProps) => {
           }
         </div>
       </Modal>
+      <Modal isOpen={editPopUp} onClose={() => setEditPopUp(false)}>
+        <CourseEditor arr={[courseTitles[currentEdit], courseMeeting[currentEdit]]}/>
+        <button className = "text-align-center p-2 center bg-red-100 rounded-lg" onClick={() => setEditPopUp(false)}> Cancel</button>
+      </Modal>
       
       <div className = "grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-4 px-3">
         
         {Object.entries(courses).map(([name, content], i) =>
           content.term === term ? (
-            <CourseCard key={i} name={name} course={content} isSelected={selected[i]} click={() => click(i)} isConflict={invalidCourses[i]} />
+            <CourseCard key={i} name={name} course={content} isSelected={selected[i]} click={() => click(i)} isConflict={invalidCourses[i]} editClick={() => editClick(i)}  />
           ) : null
         )}    
       </div>
