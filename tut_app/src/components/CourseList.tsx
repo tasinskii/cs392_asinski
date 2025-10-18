@@ -183,7 +183,7 @@ const CourseList = ({courses, term}: CourseListProps) => {
         </div>
       </Modal>
       <Modal isOpen={editPopUp} onClose={() => setEditPopUp(false)}>
-        <CourseEditor arr={[courseTitles[currentEdit], courseMeeting[currentEdit]]}/>
+        <CourseEditor arr={[courseTitles[currentEdit], courseMeeting[currentEdit], courseNames[currentEdit]]}/>
         <button className = "text-align-center p-2 center bg-red-100 rounded-lg" onClick={() => setEditPopUp(false)}> Cancel</button>
       </Modal>
       
