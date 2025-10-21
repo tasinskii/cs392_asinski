@@ -4,7 +4,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-const terms = z.enum(["F", "W", "S"]);
+
 
 const ZodCourse = z.object (
   {
@@ -24,14 +24,14 @@ type CourseEditorProps = {
 
 const CourseEditor = ({arr}: CourseEditorProps) => {
 
-  const {register, handleSubmit, formState: {errors, isSubmitting} } = useForm<CourseFormValues>(
+  const {register, handleSubmit, formState: {errors} } = useForm<CourseFormValues>(
     {
       resolver: zodResolver(ZodCourse),
       defaultValues: {
         title: arr[0],
         meeting_time: arr[1],
         course_num: arr[2].slice(1),
-        term: arr[2][0]
+        term: arr[2][0] as "F" | "W" | "S" || "F"
       }
 
     }

@@ -7,7 +7,7 @@ import Banner from './components/Banner'
 import MenuPage from './components/TermFilter';
 //import Course from './components/CourseList'
 import { useJsonQuery } from './utilities/fetch';
-
+import {useDataQuery} from './utilities/firebase'
 
 /*const schedule = {
   "title": "CS Courses for 2018-2019",
@@ -54,7 +54,7 @@ interface Course {
 
 
 const App = () => {
-  const [json, isLoading, error] = useJsonQuery("https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php")
+  const [json, isLoading, error] = useDataQuery("/")
   
   if (error) return <h1>Error loading user data: {`${error}`}</h1>;
   if (isLoading) return <h1>Loading user data...</h1>;

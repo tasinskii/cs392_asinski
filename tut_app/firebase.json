@@ -1,10 +1,14 @@
 {
   "hosting": {
-    "public": "dist",
+    "public": "public",
+    "site" : "cs392-asinski-e1ed0",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ]
+  },
+  "database": {
+    "rules": "database.rules.json"
   }
 }
