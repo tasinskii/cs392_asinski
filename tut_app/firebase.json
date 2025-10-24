@@ -1,7 +1,7 @@
 {
   "hosting": {
-    "public": "public",
-    "site" : "cs392-asinski-e1ed0",
+    "public": "dist",
+    "site": "cs392-asinski-e1ed0",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -10,5 +10,17 @@
   },
   "database": {
     "rules": "database.rules.json"
+  },
+  "emulators": {
+    "database": {
+      "port": 9000
+    },
+    "hosting": {
+      "port": 5001
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
   }
 }

@@ -6,7 +6,7 @@ import Banner from './components/Banner'
 //import MenuSelector from './components/TermFilter';
 import MenuPage from './components/TermFilter';
 //import Course from './components/CourseList'
-import { useJsonQuery } from './utilities/fetch';
+
 import {useDataQuery} from './utilities/firebase'
 
 /*const schedule = {

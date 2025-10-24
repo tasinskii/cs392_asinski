@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-
+import { editField } from "../utilities/firebase"
 
 
 const ZodCourse = z.object (
@@ -21,6 +21,12 @@ type CourseEditorProps = {
   arr: string[];
 };
 
+interface formData {
+  term: string;
+  course_num: string;
+  title: string;
+  meeting_time: string;
+};
 
 const CourseEditor = ({arr}: CourseEditorProps) => {
 
@@ -38,9 +44,9 @@ const CourseEditor = ({arr}: CourseEditorProps) => {
   )
 
 
-  const onSubmit = () => {
-    console.log(`Submitting`)
-    
+  const onSubmit = (data: formData) => {
+    console.log(data);
+    editField(data);
   };
 
   
@@ -72,31 +78,6 @@ const CourseEditor = ({arr}: CourseEditorProps) => {
       </label>
 
 
-      <label>
-        Course Number:
-        <input
-          {...register("course_num")}
-          className="rounded-lg p-4 bg-gray-200 border w-full"
-          type="text"
-        />
-        {errors.course_num && (
-          <p className="text-red-500">{errors.course_num.message}</p>
-        )}
-      </label>
-
-
-      <label>
-        Course Term:
-        <select
-          {...register("term")}
-          className="rounded-lg p-4 bg-gray-200 border w-full"
-        >
-          <option value="F">Fall</option>
-          <option value="W">Winter</option>
-          <option value="S">Spring</option>
-        </select>
-        {errors.term && <p className="text-red-500">{errors.term.message}</p>}
-      </label>
 
       <button
         type="submit"

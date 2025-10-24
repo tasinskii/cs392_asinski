@@ -2,13 +2,19 @@
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import { getDatabase, onValue, push, ref, update } from 'firebase/database';
-import { useCallback, useEffect, useState } from 'react';
+import { getDatabase, onValue, ref, update } from 'firebase/database';
+import { useEffect, useState } from 'react';
 // Your web app's Firebase configuration
+
+const dbURL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:9000?ns=cs392-asinski-e1ed0'
+  : 'https://cs392-asinski-e1ed0.firebaseio.com';
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyADpmAe5_M8whaBAGVCHeTxpLmSjs2vdu8",
   authDomain: "cs392-asinski-e1ed0.firebaseapp.com",
-  databaseURL: "https://cs392-asinski-e1ed0-default-rtdb.firebaseio.com",
+  databaseURL: dbURL,
   projectId: "cs392-asinski-e1ed0",
   storageBucket: "cs392-asinski-e1ed0.firebasestorage.app",
   messagingSenderId: "415777433199",
@@ -17,6 +23,8 @@ const firebaseConfig = {
 
 const firebase = initializeApp(firebaseConfig);
 const database = getDatabase(firebase);
+
+
 
 export const useDataQuery = (path: string): [unknown, boolean, Error | undefined] => {
   const [data, setData] = useState();
@@ -39,3 +47,19 @@ export const useDataQuery = (path: string): [unknown, boolean, Error | undefined
 
   return [ data, loading, error ];
 };
+
+interface formData {
+  term: string;
+  course_num: string;
+  title: string;
+  meeting_time: string;
+};
+
+export const editField = (data: formData) => {
+  let field = data.term + data.course_num;
+  console.log(data);
+  update(ref(database, `/courses/${field}`), {
+    meets: data.meeting_time,
+    title: data.title
+  })
+}
