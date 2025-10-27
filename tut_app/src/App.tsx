@@ -6,7 +6,6 @@ import Banner from './components/Banner'
 //import MenuSelector from './components/TermFilter';
 import MenuPage from './components/TermFilter';
 //import Course from './components/CourseList'
-
 import {useDataQuery} from './utilities/firebase'
 
 /*const schedule = {
@@ -63,9 +62,9 @@ const App = () => {
   
   //const [selection, setSelection] = useState(Object.keys(terms)[0]);
   return ( 
-    <>
-        <Banner title={schedule.title}/>
-        <MenuPage courses= {schedule.courses}/>
+    <>  
+      <Banner title={schedule.title}/> 
+      <MenuPage courses= {schedule.courses}/>
         
         
     </>

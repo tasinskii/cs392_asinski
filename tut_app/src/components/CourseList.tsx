@@ -4,6 +4,8 @@ import type {day} from '../utilities/conflicts'
 import {updateTimes, detectOverlap} from '../utilities/conflicts'
 import CourseEditor from '../components/Form'
 
+import { signInWithGoogle, signOut, useAuthState} from '../utilities/firebase'
+
 interface Course {
   term: string;
   number: string;
@@ -14,6 +16,7 @@ interface Course {
 interface CourseListProps {
   courses: Record<string, Course>;
   term: string;
+
 }
 
 interface CourseCardProps {
@@ -24,8 +27,9 @@ interface CourseCardProps {
   click: () => void;
   isConflict: boolean;
   editClick: () => void;
+  user: any;
 }
-const CourseCard = ({key, name, course, isSelected, click, isConflict, editClick}: CourseCardProps) => {
+const CourseCard = ({key, name, course, isSelected, click, isConflict, editClick, user}: CourseCardProps) => {
   console.log(key)
   //<CourseEditor arr={[course.title, course.meets]}/> 
   return (
@@ -38,7 +42,7 @@ const CourseCard = ({key, name, course, isSelected, click, isConflict, editClick
           <div className="row-start-6 text-gray-500">{course.meets}</div>
         </div>
       </div>
-      <button className = "bg-blue-50 rounded-lg p-2" onClick={editClick} >Edit</button> 
+      {user ? <button className = "bg-blue-50 rounded-lg p-2" onClick={editClick} >Edit</button> : ""}
 
     </div>
 
@@ -49,7 +53,7 @@ const CourseList = ({courses, term}: CourseListProps) => {
   const [selected, setSelected] = useState(Array(Object.entries(courses).length).fill(0));
   const [popUp, setPopUp] = useState(false);
   const [editPopUp, setEditPopUp] = useState(false);
-  
+  const {user} = useAuthState();
   let init_week = Array.from({ length: 5 }, (): day => ({ 
     times: Array<boolean>(144).fill(true)
   }))
@@ -168,11 +172,23 @@ const CourseList = ({courses, term}: CourseListProps) => {
     console.log(week);*/
   };
 
-  //console.log(Object.entries(courses)); 
   return (
-    <div> 
-      <button className="absolute top-2 right-2 text-gray-500 hover:text-gray-700" onClick={() => setPopUp(true)}>See selected courses</button> 
+    <div>
+      <span className="text-xl text-blue-400 absolute top-10 right-25">
+        Welcome, { user ? user.displayName : 'guest' }!
+      </span>
+      <span className="ml-auto">
+        {
+          user
+          ? <button className = 'absolute bg-gray-100 top-8 right-2 p-3' onClick={signOut}>Sign Out</button>
+          : <button className = 'absolute bg-gray-100 top-8 right-2 p-3' onClick={signInWithGoogle}>Sign In</button>   
+        }
+      </span> 
 
+
+
+      <button className="absolute top-2 right-2 text-gray-500 hover:text-gray-700" onClick={() => setPopUp(true)}>See selected courses</button> 
+      
       <Modal isOpen={popUp} onClose={ () => setPopUp(!popUp)}>
         <div className = "p-2 grid grid-cols-1">
           {
@@ -191,7 +207,7 @@ const CourseList = ({courses, term}: CourseListProps) => {
         
         {Object.entries(courses).map(([name, content], i) =>
           content.term === term ? (
-            <CourseCard key={i} name={name} course={content} isSelected={selected[i]} click={() => click(i)} isConflict={invalidCourses[i]} editClick={() => editClick(i)}  />
+            <CourseCard key={i} name={name} course={content} isSelected={selected[i]} click={() => click(i)} isConflict={invalidCourses[i]} editClick={() => editClick(i)} user={user}  />
           ) : null
         )}    
       </div>
