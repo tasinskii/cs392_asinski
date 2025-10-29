@@ -4,7 +4,7 @@ import type {day} from '../utilities/conflicts'
 import {updateTimes, detectOverlap} from '../utilities/conflicts'
 import CourseEditor from '../components/Form'
 
-import { signInWithGoogle, signOut, useAuthState} from '../utilities/firebase'
+import { signInWithGoogle, signOut, useAuthState, useProfile} from '../utilities/firebase'
 
 interface Course {
   term: string;
@@ -54,6 +54,7 @@ const CourseList = ({courses, term}: CourseListProps) => {
   const [popUp, setPopUp] = useState(false);
   const [editPopUp, setEditPopUp] = useState(false);
   const {user} = useAuthState();
+  const isAdmin = useProfile()[0].isAdmin;
   let init_week = Array.from({ length: 5 }, (): day => ({ 
     times: Array<boolean>(144).fill(true)
   }))
@@ -207,7 +208,7 @@ const CourseList = ({courses, term}: CourseListProps) => {
         
         {Object.entries(courses).map(([name, content], i) =>
           content.term === term ? (
-            <CourseCard key={i} name={name} course={content} isSelected={selected[i]} click={() => click(i)} isConflict={invalidCourses[i]} editClick={() => editClick(i)} user={user}  />
+            <CourseCard key={i} name={name} course={content} isSelected={selected[i]} click={() => click(i)} isConflict={invalidCourses[i]} editClick={() => editClick(i)} user={isAdmin}  />
           ) : null
         )}    
       </div>

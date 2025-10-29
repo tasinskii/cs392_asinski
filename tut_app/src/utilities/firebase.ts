@@ -39,7 +39,8 @@ export { firebaseSignOut as signOut };
 export interface AuthState {
   user: User | null,
   isAuthenticated: boolean,
-  isInitialLoading: boolean
+  isInitialLoading: boolean 
+  
 }
 
 export const addAuthStateListener = (fn: NextOrObserver<any>) => (
@@ -61,7 +62,12 @@ export const useAuthState = (): AuthState => {
   return {user, isAuthenticated, isInitialLoading };
 };
 
-
+export const useProfile = () => {
+  const {user, isAuthenticated, isInitialLoading} = useAuthState();
+  const [isAdmin, isLoading, error] =  useDataQuery(`/admins/${user?.uid || 'guest'}`);
+  
+  return [{ user, isAdmin }, isLoading, error];
+};
 
 export const useDataQuery = (path: string): [unknown, boolean, Error | undefined] => {
   const [data, setData] = useState();
