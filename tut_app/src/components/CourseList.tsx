@@ -54,7 +54,11 @@ const CourseList = ({courses, term}: CourseListProps) => {
   const [popUp, setPopUp] = useState(false);
   const [editPopUp, setEditPopUp] = useState(false);
   const {user} = useAuthState();
-  const isAdmin = useProfile()[0].isAdmin;
+  let isAdmin = false;
+  const profile = useProfile(); 
+  if (profile){
+    isAdmin = profile
+  }
   let init_week = Array.from({ length: 5 }, (): day => ({ 
     times: Array<boolean>(144).fill(true)
   }))

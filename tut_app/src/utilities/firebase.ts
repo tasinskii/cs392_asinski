@@ -62,11 +62,13 @@ export const useAuthState = (): AuthState => {
   return {user, isAuthenticated, isInitialLoading };
 };
 
-export const useProfile = () => {
-  const {user, isAuthenticated, isInitialLoading} = useAuthState();
+export const useProfile = (): any => {
+  const {user} = useAuthState();
+
   const [isAdmin, isLoading, error] =  useDataQuery(`/admins/${user?.uid || 'guest'}`);
-  
-  return [{ user, isAdmin }, isLoading, error];
+  console.log(isLoading)
+  console.log(error)
+  return isAdmin
 };
 
 export const useDataQuery = (path: string): [unknown, boolean, Error | undefined] => {
